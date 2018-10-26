@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_user_sale_price'
-  s.version     = '3.0.0'
+  s.version     = '3.0.1'
   s.summary     = 'Simple Spree extension for sales'
   s.description = 'Extension for Spree that adds possibility to define product sales for specified users.
 '
