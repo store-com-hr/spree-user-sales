@@ -87,9 +87,8 @@ class SaleCreator
   end
 
   def nested_products(taxon_id)
-    top_taxon = Spree::Taxon.find(taxon_id)
-    children_taxon_ids = top_taxon.taxonomy.taxons.pluck(:id)
-    all_taxon_ids = [top_taxon.id] + children_taxon_ids
+    parent_taxon = Spree::Taxon.find(taxon_id)
+    all_taxon_ids = parent_taxon.self_and_descendants.pluck(:id)
     Spree::ProductsTaxon.where(taxon_id: all_taxon_ids)
   end
 
