@@ -79,17 +79,17 @@ class SaleCreator
       product_ids.concat sale_params[:product_ids]
       if sale_params[:taxon_ids].any?
         sale_params[:taxon_ids].each do |taxon_id|
-          product_ids.concat nested_products(taxon_id).pluck(:product_id)
+          product_ids.concat nested_product_ids(taxon_id)
         end
       end
       product_ids
     end
   end
 
-  def nested_products(taxon_id)
+  def nested_product_ids(taxon_id)
     parent_taxon = Spree::Taxon.find(taxon_id)
     all_taxon_ids = parent_taxon.self_and_descendants.pluck(:id)
-    Spree::ProductsTaxon.where(taxon_id: all_taxon_ids)
+    Spree::ProductsTaxon.where(taxon_id: all_taxon_ids).pluck(:product_id).uniq
   end
 
   def users
