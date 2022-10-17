@@ -48,15 +48,17 @@ class SaleCreator
   end
 
   def put_variants_on_sale
-    Spree::VariantSale.destroy_all(sale: sale) if sale.persisted?
-    variants.each do |variant|
-      if users.nil?
-        variant.variant_sales.create(sale: sale, user: nil, start_date: sale.start_date,
-                                     end_date: sale.end_date)
-      else
-        users.each do |user|
-          variant.variant_sales.create(sale: sale, user: user, start_date: sale.start_date,
+    Spree::VariantSale.transaction do
+      Spree::VariantSale.destroy_all(sale: sale) if sale.persisted?
+      variants.each do |variant|
+        if users.nil?
+          variant.variant_sales.create(sale: sale, user: nil, start_date: sale.start_date,
                                        end_date: sale.end_date)
+        else
+          users.each do |user|
+            variant.variant_sales.create(sale: sale, user: user, start_date: sale.start_date,
+                                         end_date: sale.end_date)
+          end
         end
       end
     end
